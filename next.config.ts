@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  allowedDevOrigins: [
+      "https://pixeldriftapi.onrender.com",
+    ],
 };
 
 export default nextConfig;
