@@ -18,7 +18,9 @@ export const metadata: Metadata = {
     "google-site-verification":
       "googlee32d5da59eac3ee4",
   },
-
+  verification: {
+    google : "Z4Lp6kljxAXPQ4JlvGwaJYPtiKN_bZp9X6WukReXHLw",
+  },
   description:
     "PixelDrift offers fast, secure and mobile-friendly tools to merge, split, compress, convert and enhance PDF & Image files — plus AI-powered background removal.",
 
