@@ -1,0 +1,21 @@
+# robots.txt for PixelDrift
+# https://pixeldrift.online
+
+User-agent: *
+Allow: /
+
+# Block backend & system routes
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow public pages explicitly
+Allow: /about
+Allow: /contact
+Allow: /faq
+Allow: /privacy
+Allow: /terms
+Allow: /tools/
+
+# Sitemap
+Sitemap: https://pixeldrift.online/sitemap.xml

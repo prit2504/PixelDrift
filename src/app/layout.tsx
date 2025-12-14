@@ -14,6 +14,10 @@ export const metadata: Metadata = {
     default: "PixelDrift — PDF, Image & AI Tools",
     template: "%s | PixelDrift",
   },
+  other: {
+    "google-site-verification":
+      "googlee32d5da59eac3ee4",
+  },
 
   description:
     "PixelDrift offers fast, secure and mobile-friendly tools to merge, split, compress, convert and enhance PDF & Image files — plus AI-powered background removal.",
