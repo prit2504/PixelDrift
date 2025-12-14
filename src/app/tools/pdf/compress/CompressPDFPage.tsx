@@ -106,7 +106,7 @@ export default function CompressPDFAdvancedPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/pdf/compress-pdf-advanced?${params.toString()}`,
+        "/api/pdf/compress",
         { method: "POST", body: formData }
       );
 

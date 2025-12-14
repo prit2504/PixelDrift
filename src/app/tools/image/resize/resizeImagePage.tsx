@@ -12,6 +12,7 @@ type ResizeMode = "fit" | "stretch" | "pad";
 interface Preset {
   label: string;
   w: number;
+
   h: number;
 }
 
@@ -194,11 +195,10 @@ export default function ResizeImagePage() {
     form.append("out_format", "jpeg");
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL;
-      if (!API_URL) throw new Error("API URL is not configured.");
+      
 
       const res = await fetch(
-        `${API_URL}/image/resize-image`,
+        "/api/image/resize",
         { method: "POST", body: form, cache: 'no-store' }
       );
 

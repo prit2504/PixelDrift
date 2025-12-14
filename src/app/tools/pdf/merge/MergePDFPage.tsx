@@ -66,7 +66,7 @@ export default function MergePDF() {
     files.forEach((file) => formData.append("files", file));
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pdf/merge-pdf`, {
+      const res = await fetch("/api/pdf/merge", {
         method: "POST",
         body: formData,
       });

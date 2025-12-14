@@ -37,7 +37,7 @@ export default function SplitAdvancedPDF() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/pdf/split-pdf-advanced?pages=${pages}`,
+        "/api/pdf/split",
         { method: "POST", body: formData }
       );
 

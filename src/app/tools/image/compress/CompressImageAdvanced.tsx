@@ -142,7 +142,7 @@ export default function CompressImageAdvanced() {
       formData.append("file", file);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/image/compress-image-advanced?${queryParams.toString()}`,
+        `/api/image/compress?${queryParams.toString()}`,
         {
           method: "POST",
           body: formData,

@@ -111,7 +111,7 @@ export default function ImageToPDFPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/pdf/image-to-pdf-advanced?${params}`,
+        "/api/pdf/image-to-pdf",
         { method: "POST", body: form }
       );
 

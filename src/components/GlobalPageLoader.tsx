@@ -4,69 +4,41 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { FileText, Image as ImageIcon } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
-
 export default function GlobalPageLoader() {
   const pathname = usePathname();
 
+  const [visible, setVisible] = useState(true);
   const [routeLoading, setRouteLoading] = useState(false);
-  const [backendReady, setBackendReady] = useState(false);
-  const [show, setShow] = useState(true);
-  const [message, setMessage] = useState("Starting server…");
+  const [message, setMessage] = useState("Loading tools…");
 
-  /* -------------------------------
+  /* --------------------------------
+     INITIAL LOAD (FIRST VISIT)
+  -------------------------------- */
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setVisible(false);
+    }, 900); // smooth premium feel
+
+    return () => clearTimeout(t);
+  }, []);
+
+  /* --------------------------------
      ROUTE CHANGE LOADER
   -------------------------------- */
   useEffect(() => {
     setRouteLoading(true);
-    const t = setTimeout(() => setRouteLoading(false), 400);
+    setVisible(true);
+    setMessage("Loading page…");
+
+    const t = setTimeout(() => {
+      setRouteLoading(false);
+      setVisible(false);
+    }, 450);
+
     return () => clearTimeout(t);
   }, [pathname]);
 
-  /* -------------------------------
-     BACKEND COLD START CHECK
-  -------------------------------- */
-  useEffect(() => {
-    let cancelled = false;
-
-    async function wakeBackend() {
-      try {
-        setMessage("Starting server…");
-
-        const res = await fetch(`${API_URL}/health`, {
-          cache: "no-store",
-        });
-
-        if (!cancelled && res.ok) {
-          setBackendReady(true);
-          setMessage("Loading tools…");
-        }
-      } catch {
-        // backend sleeping → retry
-        setTimeout(wakeBackend, 2000);
-      }
-    }
-
-    wakeBackend();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  /* -------------------------------
-     CONTROL VISIBILITY
-  -------------------------------- */
-  useEffect(() => {
-    if (backendReady && !routeLoading) {
-      const t = setTimeout(() => setShow(false), 300);
-      return () => clearTimeout(t);
-    } else {
-      setShow(true);
-    }
-  }, [backendReady, routeLoading]);
-
-  if (!show) return null;
+  if (!visible || !routeLoading && !visible) return null;
 
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm animate-fadeIn">
@@ -87,7 +59,7 @@ export default function GlobalPageLoader() {
 
       {/* PROGRESS BAR */}
       <div className="w-44 h-1.5 bg-white/20 rounded-full overflow-hidden">
-        <div className="h-full w-1/2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-progressSlide"></div>
+        <div className="h-full w-1/2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-progressSlide" />
       </div>
     </div>
   );

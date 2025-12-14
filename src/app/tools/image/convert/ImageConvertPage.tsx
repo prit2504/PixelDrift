@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 
 /* ---------------- TYPES ---------------- */
 
-type OutputFormat = "jpeg" | "png" | "webp" | "bmp" | "tiff";
+type OutputFormat = "jpeg" | "png" | "webp" | "tiff";
 
 interface ImageItem {
   file: File;
@@ -75,7 +75,7 @@ export default function ImageConvertPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/image/convert-image`,
+        "/api/image/convert",
         { method: "POST", body: form }
       );
 
@@ -183,7 +183,6 @@ export default function ImageConvertPage() {
             <option value="jpeg">JPEG</option>
             <option value="png">PNG</option>
             <option value="webp">WebP</option>
-            <option value="bmp">BMP</option>
             <option value="tiff">TIFF</option>
           </select>
 
