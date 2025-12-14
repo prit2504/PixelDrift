@@ -6,30 +6,47 @@ import { UploadCloud, X, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 
+/* ---------------- TYPES ---------------- */
+
+type OutputFormat = "jpeg" | "png" | "webp" | "bmp" | "tiff";
+
+interface ImageItem {
+  file: File;
+  url: string;
+  name: string;
+}
+
+/* ---------------- COMPONENT ---------------- */
+
 export default function ImageConvertPage() {
-  const [files, setFiles] = useState<any[]>([]);
-  const [format, setFormat] = useState("jpeg");
+  const [files, setFiles] = useState<ImageItem[]>([]);
+  const [format, setFormat] = useState<OutputFormat>("jpeg");
   const [rename, setRename] = useState("");
   const [loading, setLoading] = useState(false);
   const [dragging, setDragging] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  /* ----------------------------
-      FILE HANDLING
-  ----------------------------- */
+  /* ---------------- FILE HANDLING ---------------- */
+
   const handleFiles = (fileList: FileList) => {
-    const newFiles = Array.from(fileList).map((f) => ({
-      file: f,
-      url: URL.createObjectURL(f),
-      name: f.name,
-    }));
+    const items: ImageItem[] = Array.from(fileList)
+      .filter((f) => f.type.startsWith("image/"))
+      .map((f) => ({
+        file: f,
+        url: URL.createObjectURL(f),
+        name: f.name,
+      }));
 
-    setFiles((prev) => [...prev, ...newFiles]);
+    setFiles((prev) => [...prev, ...items]);
   };
 
   const removeFile = (name: string) => {
-    setFiles((prev) => prev.filter((f) => f.name !== name));
+    setFiles((prev) => {
+      const file = prev.find((f) => f.name === name);
+      if (file) URL.revokeObjectURL(file.url);
+      return prev.filter((f) => f.name !== name);
+    });
   };
 
   const clearAll = () => {
@@ -38,11 +55,13 @@ export default function ImageConvertPage() {
     setRename("");
   };
 
-  /* ----------------------------
-      CONVERSION HANDLER
-  ----------------------------- */
-  const convertImages = async () => {
-    if (files.length === 0) return toast.error("Upload at least one image.");
+  /* ---------------- CONVERT ---------------- */
+
+  const convertImages = async (): Promise<void> => {
+    if (files.length === 0) {
+      toast.error("Upload at least one image.");
+      return;
+    }
 
     setLoading(true);
 
@@ -50,211 +69,144 @@ export default function ImageConvertPage() {
     files.forEach((f) => form.append("files", f.file));
     form.append("out_format", format);
 
-    if (rename.trim() !== "") {
-      form.append("rename_to", rename);
+    if (rename.trim()) {
+      form.append("rename_to", rename.trim());
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/image/convert-image`, {
-        method: "POST",
-        body: form,
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/image/convert-image`,
+        { method: "POST", body: form }
+      );
 
-      if (!res.ok) throw new Error("Failed to convert images.");
+      if (!res.ok) {
+        throw new Error("Conversion failed");
+      }
 
       const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
       a.href = url;
-
       a.download =
         files.length === 1
-          ? (rename || files[0].name.split(".")[0]) + "." + format
+          ? `${rename || files[0].name.split(".")[0]}.${format}`
           : "converted_images.zip";
-
       a.click();
 
-      window.URL.revokeObjectURL(url);
+      URL.revokeObjectURL(url);
       clearAll();
       toast.success("Images converted successfully!");
-    } catch {
+    } catch (err) {
       toast.error("Failed to convert images.");
     } finally {
       setLoading(false);
     }
   };
 
-  /* ----------------------------
-      UI STARTS HERE
-  ----------------------------- */
+  /* ---------------- UI ---------------- */
+
   return (
     <>
-      {/* FULLSCREEN LOADING OVERLAY */}
       {loading && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center z-[9999]">
           <Loader2 className="animate-spin text-white" size={48} />
-          <p className="text-white mt-4 text-lg font-medium">
-            Converting images…
-          </p>
+          <p className="text-white mt-4 text-lg">Converting images…</p>
         </div>
       )}
 
       <ToolLayout
         title="Convert Image Format"
-        description="Convert images to JPG, PNG, WebP, BMP, or TIFF. Supports batch conversion and custom file naming."
+        description="Convert images to JPG, PNG, WebP, BMP or TIFF."
         sidebarCategory="image"
       >
-        {/* UPLOAD BOX */}
+        {/* UPLOAD */}
         <div
-          className={`
-            cursor-pointer rounded-2xl p-10 text-center transition
-            border-2 border-dashed 
-            ${dragging ? "border-blue-600 bg-blue-50 dark:bg-neutral-800" : "border-gray-300 dark:border-neutral-700"}
-            bg-gradient-to-b from-white to-gray-50 dark:from-neutral-800 dark:to-neutral-900
-            hover:shadow-md shadow-sm
-          `}
+          className={`cursor-pointer rounded-2xl p-10 text-center border-2 border-dashed
+          ${
+            dragging
+              ? "border-blue-600 bg-blue-50 dark:bg-neutral-800"
+              : "border-gray-300 dark:border-neutral-700"
+          }`}
           onClick={() => fileInputRef.current?.click()}
-          onDragEnter={(e) => {
-            e.preventDefault();
-            setDragging(true);
-          }}
-          onDragLeave={(e) => {
-            e.preventDefault();
-            setDragging(false);
-          }}
           onDragOver={(e) => e.preventDefault()}
+          onDragEnter={() => setDragging(true)}
+          onDragLeave={() => setDragging(false)}
           onDrop={(e) => {
             e.preventDefault();
             setDragging(false);
             handleFiles(e.dataTransfer.files);
           }}
         >
-          <div className="mx-auto bg-blue-50 dark:bg-blue-900/30 p-5 rounded-2xl w-fit mb-4">
-            <UploadCloud className="h-10 w-10 text-blue-600 dark:text-blue-400" />
-          </div>
-
-          <p className="text-base font-medium text-gray-700 dark:text-gray-200">
-            Drag & drop images here, or click to browse
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            JPG, PNG, WebP, BMP, TIFF supported
-          </p>
+          <UploadCloud className="mx-auto h-10 w-10 mb-3 text-blue-600" />
+          <p>Drag & drop images or click to upload</p>
 
           <input
-            type="file"
-            accept="image/*"
-            multiple
             ref={fileInputRef}
-            className="hidden"
+            type="file"
+            hidden
+            multiple
+            accept="image/*"
             onChange={(e) => e.target.files && handleFiles(e.target.files)}
           />
         </div>
 
-        {/* FILE PREVIEW GRID */}
+        {/* PREVIEW */}
         {files.length > 0 && (
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {files.map((item, idx) => (
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {files.map((item) => (
               <motion.div
                 key={item.name}
                 layout
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="relative border rounded-xl overflow-hidden shadow-sm bg-white dark:bg-neutral-800"
+                className="relative rounded-xl overflow-hidden border"
               >
-                <img
-                  src={item.url}
-                  alt={item.name}
-                  className="w-full h-32 object-cover"
-                />
-
+                <img src={item.url} className="w-full h-32 object-cover" />
                 <button
                   onClick={() => removeFile(item.name)}
-                  className="
-                    absolute top-2 right-2 bg-white dark:bg-neutral-900
-                    rounded-full p-1 shadow
-                  "
+                  className="absolute top-2 right-2 bg-white rounded-full p-1"
                 >
-                  <X size={16} className="text-red-500" />
+                  <X size={16} />
                 </button>
-
-                <div className="px-2 py-1 text-xs truncate text-gray-700 dark:text-gray-300">
-                  {item.name}
-                </div>
+                <div className="px-2 py-1 text-xs truncate">{item.name}</div>
               </motion.div>
             ))}
           </div>
         )}
 
-        {/* OPTIONS PANEL */}
-        <div className="mt-10 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-2xl p-6 space-y-6 shadow-sm">
-          <h2 className="text-lg font-semibold">Conversion Options</h2>
+        {/* OPTIONS */}
+        <div className="mt-8 space-y-4">
+          <select
+            value={format}
+            onChange={(e) => setFormat(e.target.value as OutputFormat)}
+            className="w-full px-4 py-2 rounded-xl border"
+          >
+            <option value="jpeg">JPEG</option>
+            <option value="png">PNG</option>
+            <option value="webp">WebP</option>
+            <option value="bmp">BMP</option>
+            <option value="tiff">TIFF</option>
+          </select>
 
-          {/* OUTPUT FORMAT */}
-          <div>
-            <label className="text-sm font-medium">Output Format</label>
-            <select
-              value={format}
-              onChange={(e) => setFormat(e.target.value)}
-              className="
-                w-full mt-2 px-4 py-2.5 rounded-xl border text-sm
-                bg-gray-50 dark:bg-neutral-900
-                border-gray-300 dark:border-neutral-700
-                focus:ring-2 focus:ring-blue-500
-                transition
-              "
-            >
-              <option value="jpeg">JPG / JPEG</option>
-              <option value="png">PNG (Transparent)</option>
-              <option value="webp">WebP (Modern)</option>
-              <option value="bmp">BMP</option>
-              <option value="tiff">TIFF</option>
-            </select>
-          </div>
-
-          {/* RENAME OPTION */}
-          <div>
-            <label className="text-sm font-medium">Rename Output (Optional)</label>
-            <input
-              type="text"
-              placeholder="Example: vacation-photo"
-              value={rename}
-              onChange={(e) => setRename(e.target.value)}
-              className="
-                w-full mt-2 px-4 py-2.5 rounded-xl border text-sm
-                bg-gray-50 dark:bg-neutral-900
-                border-gray-300 dark:border-neutral-700
-                focus:ring-2 focus:ring-blue-500
-              "
-            />
-            <p className="text-xs mt-1 text-gray-500">
-              Multiple files → <b>name_1</b>, <b>name_2</b>, etc.
-            </p>
-          </div>
+          <input
+            type="text"
+            placeholder="Rename output (optional)"
+            value={rename}
+            onChange={(e) => setRename(e.target.value)}
+            className="w-full px-4 py-2 rounded-xl border"
+          />
         </div>
 
-        {/* ACTION BUTTON */}
+        {/* ACTIONS */}
         {files.length > 0 && (
-          <div className="mt-8 flex items-center gap-4">
+          <div className="mt-6 flex gap-4">
             <button
               onClick={convertImages}
               disabled={loading}
-              className="
-                px-6 py-3 rounded-xl shadow-md
-                bg-blue-600 hover:bg-blue-700 text-white font-medium
-                disabled:opacity-50 active:scale-95 transition
-              "
+              className="px-6 py-3 bg-blue-600 text-white rounded-xl"
             >
-              Convert Images
+              Convert
             </button>
-
-            <button
-              onClick={clearAll}
-              className="
-                px-6 py-3 rounded-xl border border-gray-300 dark:border-neutral-700
-                bg-white dark:bg-neutral-800
-              "
-            >
+            <button onClick={clearAll} className="px-6 py-3 border rounded-xl">
               Clear
             </button>
           </div>

@@ -31,7 +31,7 @@ const tools = [
     description: "Combine multiple PDF files into one clean document.",
     href: "/tools/pdf/merge",
     category: "pdf",
-    tag: "PDF",
+    tag: "pdf",
     icon: IoDocumentTextOutline,
   },
   {
@@ -40,7 +40,7 @@ const tools = [
     description: "Extract specific pages or page ranges from any PDF.",
     href: "/tools/pdf/split",
     category: "pdf",
-    tag: "PDF",
+    tag: "pdf",
     icon: IoCutOutline,
   },
   {
@@ -49,7 +49,16 @@ const tools = [
     description: "Reduce PDF size without losing clarity.",
     href: "/tools/pdf/compress",
     category: "pdf",
-    tag: "Advanced",
+    tag: "pdf",
+    icon: IoImageOutline,
+  },
+  {
+    id: "image-to-pdf",
+    title: "Image To PDF",
+    description: "Generate a pdf from images",
+    href: "/tools/pdf/image-to-pdf",
+    category: "pdf",
+    tag: "pdf",
     icon: IoImageOutline,
   },
 

@@ -18,11 +18,11 @@ const imageTools = [
     category: "image",
   },
   {
-    id: "compress-image-adv",
-    title: "Compress Image (Advanced)",
+    id: "Image resize",
+    title: "Image Resize)",
     description:
       "Set quality, resize %, max dimensions, format conversion & metadata options.",
-    href: "/tools/image/compress-advanced",
+    href: "/tools/image/resize",
     icon: Wand2,
     tag: "Advanced",
     category: "image",
