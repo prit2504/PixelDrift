@@ -1,6 +1,7 @@
 
 import type { Metadata } from "next";
 import { Suspense } from "react"; // ✅ ADD THIS
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -121,6 +122,9 @@ export default function RootLayout({
 
         {/* Mobile Bottom Navigation */}
         <MobileNav />
+
+        {/* Vercel Web Analytics */}
+        <Analytics />
       </body>
     </html>
   );
