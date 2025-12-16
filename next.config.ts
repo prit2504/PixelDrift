@@ -1,12 +1,54 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
 
-const nextConfig: NextConfig = {
-  allowedDevOrigins: [
-      // "https://pixeldriftapi.onrender.com",
-      // "https://pixeldrift-backend-prit25042821-8gsem2ki.leapcell.dev",
-      // "http://127.0.0.1:8000"
-      "http://10.123.5.214:3000"
-    ],
+  async headers() {
+    return [
+      // ---------- STATIC ASSETS ----------
+      {
+        source: "/assets/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+
+      {
+        source: "/logo.png",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+
+      // ---------- PAGES ----------
+      {
+        source: "/",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+
+      {
+        source: "/tools/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=3600, stale-while-revalidate=86400",
+          },
+        ],
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
