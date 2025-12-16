@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/app/api/pdf/compress/route.js", "src/app/api/image/resize/route.js", "src/app/api/image/convert/route.js"  ],
   "exclude": ["node_modules"]
 }

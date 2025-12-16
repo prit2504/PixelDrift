@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import MobileNav from "@/components/MobileNav";
 import GlobalPageLoader from "@/components/GlobalPageLoader";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://pixeldrift.online"), 
@@ -114,6 +115,7 @@ export default function RootLayout({
 
         <main className="pt-20 pb-24">
           <div className="container mx-auto px-4">{children}</div>
+          
         </main>
 
         {/* Footer */}
@@ -121,6 +123,7 @@ export default function RootLayout({
 
         {/* Mobile Bottom Navigation */}
         <MobileNav />
+        <Analytics />
       </body>
     </html>
   );

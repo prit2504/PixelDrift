@@ -179,40 +179,26 @@ export default function HomePage() {
 
           {/* HERO IMAGES */}
           <div className="hidden md:flex relative justify-center" aria-hidden="true">
-            <img
-              src="/assets/home/hero-main-light.png"
-              className="w-[85%] rounded-3xl shadow-xl dark:hidden floating"
-              alt="PDF & Image toolkit preview"
-            />
 
             <img
-              src="/assets/home/hero-main-dark.png"
-              className="w-[85%] rounded-3xl shadow-xl hidden dark:block floating"
+              src="/assets/home/hero-main-dark.webp"
+              className="w-[85%] rounded-3xl shadow-xl floating"
               alt="PDF & Image toolkit preview dark"
             />
 
             {/* Floating small images */}
+
+
             <img
-              src="/assets/home/hero-img-1-light.png"
-              className="absolute -top-6 -left-6 w-28 rounded-xl shadow-lg dark:hidden floating-slow"
+              src="/assets/home/image-preview-dark.webp"
+              className="absolute -top-6 -left-6 w-28 rounded-xl shadow-lg  floating-slow"
               alt="example tool preview"
             />
 
-            <img
-              src="/assets/home/hero-img-1-dark.png"
-              className="absolute -top-6 -left-6 w-28 rounded-xl shadow-lg hidden dark:block floating-slow"
-              alt="example tool preview"
-            />
 
             <img
-              src="/assets/home/hero-img-2-light.png"
-              className="absolute bottom-4 -right-4 w-32 rounded-xl shadow-lg dark:hidden floating-slow"
-              alt="example tool preview"
-            />
-
-            <img
-              src="/assets/home/hero-img-2-dark.png"
-              className="absolute bottom-4 -right-4 w-32 rounded-xl shadow-lg hidden dark:block floating-slow"
+              src="/assets/home/pdf-preview-dark.webp"
+              className="absolute bottom-4 -right-4 w-32 rounded-xl shadow-lg floating-slow"
               alt="example tool preview"
             />
           </div>
