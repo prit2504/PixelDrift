@@ -209,7 +209,7 @@ export default function CompressImageAdvanced() {
   -------------------------------------------------- */
   return (
     <ToolLayout
-      title="Compress Image (Advanced)"
+      title="Compress Image"
       description="Advanced compression with live size estimation."
       sidebarCategory="image"
     >

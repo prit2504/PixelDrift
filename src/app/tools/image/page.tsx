@@ -19,7 +19,7 @@ const imageTools = [
   },
   {
     id: "Image resize",
-    title: "Image Resize)",
+    title: "Image Resize",
     description:
       "Set quality, resize %, max dimensions, format conversion & metadata options.",
     href: "/tools/image/resize",

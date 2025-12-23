@@ -61,7 +61,7 @@ export default function SplitAdvancedPDF() {
 
   return (
     <ToolLayout
-      title="Split PDF (Advanced)"
+      title="Split PDF"
       description="Extract specific pages or custom ranges and download them as a clean, new PDF."
       sidebarCategory="pdf"
     >
