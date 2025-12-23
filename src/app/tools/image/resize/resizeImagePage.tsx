@@ -506,29 +506,90 @@ export default function ResizeImagePage() {
       )}
 
       <section className="mt-24 border-t pt-16">
-        <header className="text-center mb-10">
-          <h2 className="text-3xl font-extrabold mb-3">
-            Resize Images Online Without Quality Loss
-          </h2>
-          <p className="text-lg text-neutral-600 dark:text-neutral-400">
-            Resize images for web, social media and email in seconds.
-          </p>
-        </header>
+  <div className="max-w-5xl mx-auto space-y-16">
 
-        <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-8 rounded-2xl border">
-          <p>
-            PixelDrift’s image resizer lets you resize images online using presets or
-            custom dimensions. Whether you need Instagram sizes or website-optimized
-            images, this tool ensures perfect output every time.
-          </p>
-          <ul>
-            <li>Resize images without distortion</li>
-            <li>Maintain aspect ratio or pad background</li>
-            <li>Batch resize multiple images</li>
-            <li>Improve page speed and SEO</li>
-          </ul>
-        </article>
-      </section>
+    {/* HEADER */}
+    <header className="text-center">
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+        Resize Images Online Without Quality Loss
+      </h2>
+      <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+        Resize images precisely for websites, social media, email, and design
+        workflows — fast, flexible, and high quality.
+      </p>
+    </header>
+
+    {/* FEATURE GRID */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+        <h3 className="font-bold text-xl mb-3">
+          Precision Image Resizing
+        </h3>
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+          Resize images using exact width and height values or smart presets
+          without stretching or distorting the original image.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+        <h3 className="font-bold text-xl mb-3">
+          Smart Aspect Ratio Control
+        </h3>
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+          Maintain original proportions automatically or pad background color
+          to fit required dimensions perfectly.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+        <h3 className="font-bold text-xl mb-3">
+          Batch Image Resizing
+        </h3>
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+          Resize multiple images at once with consistent sizing rules —
+          ideal for content teams and designers.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+        <h3 className="font-bold text-xl mb-3">
+          Performance & SEO Optimized
+        </h3>
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+          Properly sized images load faster, improve Core Web Vitals,
+          and enhance search engine rankings.
+        </p>
+      </div>
+    </div>
+
+    {/* SEO-RICH CONTENT BLOCK */}
+    <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-10 rounded-2xl border">
+      <h3>Why use PixelDrift’s Image Resizer?</h3>
+
+      <p>
+        Incorrect image dimensions can slow down websites, break layouts,
+        and reduce user engagement. PixelDrift’s image resizer helps you
+        resize images online using smart presets or custom dimensions —
+        completely free and easy to use.
+      </p>
+
+      <ul>
+        <li>Resize images without distortion or quality loss</li>
+        <li>Maintain aspect ratio or pad background color</li>
+        <li>Batch resize multiple images efficiently</li>
+        <li>Optimize images for web performance and SEO</li>
+        <li>No signup required and privacy-first processing</li>
+      </ul>
+
+      <p>
+        Whether you’re preparing images for social media, websites, emails,
+        or marketing campaigns, PixelDrift gives you precise control over
+        image dimensions and output quality.
+      </p>
+    </article>
+
+  </div>
+</section>
 
     </ToolLayout>
   );

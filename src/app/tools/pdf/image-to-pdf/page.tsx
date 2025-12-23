@@ -1,46 +1,46 @@
+// app/tools/pdf/image-to-pdf/page.tsx
 import type { Metadata } from "next";
 import ImageToPDFAdvanced from "./ImageToPdfPage";
+import ImageToPDFJsonLd from "./ImageToPDFJsonLd";
 
 export const metadata: Metadata = {
-  title: "Image to PDF  | Convert JPG, PNG, WebP to PDF – PixelDrift",
+  title: "Image to PDF Online – Convert JPG, PNG & WebP to PDF | PixelDrift",
   description:
-    "Convert images to a high-quality PDF with advanced layout controls: page size, margins, DPI, orientation, background color, fit modes, and drag-to-reorder. Fast, secure & free.",
+    "Convert images to a high-quality PDF online. Control page size, margins, DPI, orientation, layout and order. Free, secure & no signup.",
   keywords: [
-    "image to pdf",
+    "image to pdf online",
     "convert images to pdf",
     "jpg to pdf",
     "png to pdf",
     "webp to pdf",
-    "image to pdf converter online",
-    "high quality image to pdf",
-    "a4 pdf image converter",
-    "pixel image to pdf",
-    "advanced image to pdf tool",
+    "image to pdf converter",
     "batch image to pdf",
-    "pixel drift image tools"
+    "PixelDrift pdf tools",
   ],
+  alternates: {
+    canonical: "https://pixeldrift.online/tools/pdf/image-to-pdf",
+  },
   openGraph: {
-    title: "Image to PDF  | Professional Image-to-PDF Converter – PixelDrift",
+    title: "Image to PDF Online – PixelDrift",
     description:
-      "Convert multiple images to a perfectly formatted PDF. Customize margins, DPI, orientation, layout style, background color, and fit mode.",
+      "Convert multiple images into a perfectly formatted PDF with full layout control.",
     url: "https://pixeldrift.online/tools/pdf/image-to-pdf",
+    siteName: "PixelDrift",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Image to PDF – PixelDrift",
+    title: "Image to PDF Online – PixelDrift",
     description:
-      "Convert JPG, PNG, WebP images into a polished PDF with custom sizes, margins, DPI, alignment, and more.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://pixeldrift.online/tools/pdf/image-to-pdf",
+      "Convert JPG, PNG and WebP images into a clean, high-quality PDF.",
   },
 };
 
 export default function Page() {
-  return <ImageToPDFAdvanced/>;
+  return (
+    <>
+      <ImageToPDFJsonLd />
+      <ImageToPDFAdvanced />
+    </>
+  );
 }

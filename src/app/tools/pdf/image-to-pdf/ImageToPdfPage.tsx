@@ -144,15 +144,25 @@ export default function ImageToPDFPage() {
       description="Convert images into a clean, high-quality PDF with advanced layout controls."
       sidebarCategory="pdf"
     >
+      <h1 className="sr-only">
+        Image to PDF Online – Free, High Quality & Secure
+      </h1>
+
       {/* UPLOAD */}
       <div
         onClick={() => fileInputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
-        className="cursor-pointer rounded-2xl p-10 text-center border-2 border-dashed"
+        className="cursor-pointer rounded-2xl p-10 text-center border-2 border-dashed
+             border-neutral-200 dark:border-neutral-800
+             bg-white dark:bg-neutral-900 hover:border-blue-500 transition"
       >
         <UploadCloud className="mx-auto h-12 w-12 text-blue-600 mb-3" />
-        <p className="text-sm">Drag & drop images or click to upload</p>
+        <p className="text-neutral-600 dark:text-neutral-400">
+          Drag & drop images or click to upload
+        </p>
+
+
 
         <input
           ref={fileInputRef}
@@ -165,39 +175,41 @@ export default function ImageToPDFPage() {
       </div>
 
       {/* REORDER LIST */}
-      {items.length > 0 && (
-        <Reorder.Group
-          axis="y"
-          values={items}
-          onReorder={setItems}
-          className="mt-10 space-y-4"
-        >
-          {items.map((item) => (
-            <Reorder.Item
-              key={item.id}
-              value={item}
-              className="flex items-center gap-4 p-4 rounded-xl border bg-white"
-            >
-              <GripVertical className="text-gray-400 cursor-grab" />
-
-              <img
-                src={item.preview}
-                className="w-16 h-16 object-cover rounded-lg"
-                alt=""
-              />
-
-              <p className="flex-1 text-sm font-medium">{item.file.name}</p>
-
-              <button
-                onClick={() => removeItem(item.id)}
-                className="p-2 rounded-lg hover:bg-red-100"
+      {
+        items.length > 0 && (
+          <Reorder.Group
+            axis="y"
+            values={items}
+            onReorder={setItems}
+            className="mt-10 space-y-4"
+          >
+            {items.map((item) => (
+              <Reorder.Item
+                key={item.id}
+                value={item}
+                className="flex items-center gap-4 p-4 rounded-xl border bg-white"
               >
-                <X className="text-red-500" />
-              </button>
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
-      )}
+                <GripVertical className="text-gray-400 cursor-grab" />
+
+                <img
+                  src={item.preview}
+                  className="w-16 h-16 object-cover rounded-lg"
+                  alt=""
+                />
+
+                <p className="flex-1 text-sm font-medium">{item.file.name}</p>
+
+                <button
+                  onClick={() => removeItem(item.id)}
+                  className="p-2 rounded-lg hover:bg-red-100"
+                >
+                  <X className="text-red-500" />
+                </button>
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
+        )
+      }
 
       {/* OPTIONS */}
       <div className="mt-12 grid md:grid-cols-2 gap-8">
@@ -264,7 +276,92 @@ export default function ImageToPDFPage() {
           {loading ? "Generating…" : "Create PDF"}
         </button>
       </div>
-    </ToolLayout>
+      <section className="mt-24 border-t pt-16">
+        <div className="max-w-5xl mx-auto space-y-16">
+
+          {/* HEADER */}
+          <header className="text-center">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+              Convert Images to PDF with Full Layout Control
+            </h2>
+            <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+              Create clean, professional PDFs from images with precise sizing,
+              alignment, and ordering.
+            </p>
+          </header>
+
+          {/* FEATURE GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Professional Page Layout
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Choose standard page sizes like A4 or Letter, control margins,
+                orientation, and DPI for print-ready PDFs.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Smart Image Fitting
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Use contain or cover modes to prevent distortion or fill the page
+                exactly as needed.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Drag & Reorder Pages
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Reorder images visually before PDF generation to ensure perfect
+                page sequence.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Privacy-First Processing
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Files are processed securely and never stored. Everything is deleted
+                immediately after PDF creation.
+              </p>
+            </div>
+          </div>
+
+          {/* SEO-RICH CONTENT */}
+          <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-10 rounded-2xl border">
+            <h3>Why use PixelDrift’s Image to PDF Converter?</h3>
+
+            <p>
+              Converting images into a PDF is essential for sharing, printing,
+              archiving, and professional documentation. PixelDrift’s advanced
+              image-to-PDF tool gives you complete control over layout and output
+              quality — without requiring any software installation.
+            </p>
+
+            <ul>
+              <li>Convert JPG, PNG and WebP images to PDF</li>
+              <li>Customize page size, margins, DPI and orientation</li>
+              <li>Drag to reorder pages before export</li>
+              <li>Batch image-to-PDF conversion</li>
+              <li>No signup required and privacy-first</li>
+            </ul>
+
+            <p>
+              Whether you’re creating reports, portfolios, invoices, or scanned
+              documents, PixelDrift ensures clean, professional PDF output every time.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
+    </ToolLayout >
   );
 }
 

@@ -65,30 +65,24 @@ export default function SplitAdvancedPDF() {
       description="Extract specific pages or custom ranges and download them as a clean, new PDF."
       sidebarCategory="pdf"
     >
+      <h1 className="sr-only">
+        Split PDF Online – Extract Pages Securely
+      </h1>
+
       {/* PREMIUM UPLOAD BOX */}
       <div
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={handleDragDrop}
         onClick={() => fileInputRef.current?.click()}
-        className="
-          cursor-pointer rounded-2xl p-10 text-center
-          border border-gray-300 dark:border-neutral-700
-          bg-gradient-to-b from-white to-gray-50
-          dark:from-neutral-800 dark:to-neutral-900
-          hover:shadow-md transition shadow-sm
-        "
+        onDragOver={(e) => e.preventDefault()}
+        
+        className="cursor-pointer rounded-2xl p-10 text-center border-2 border-dashed
+             border-neutral-200 dark:border-neutral-800
+             bg-white dark:bg-neutral-900 hover:border-blue-500 transition"
       >
-        <div className="mx-auto bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl w-fit mb-4">
-          <UploadCloud className="h-10 w-10 text-blue-600 dark:text-blue-400" />
-        </div>
-
-        <p className="text-base font-medium text-gray-700 dark:text-gray-200">
-          Drag & drop a PDF here, or click to browse
+        <UploadCloud className="mx-auto h-12 w-12 mb-3 text-blue-600" />
+        <p className="text-neutral-600 dark:text-neutral-400">
+          Drag & drop PDF files or click to upload
         </p>
-
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          Secure • Fast • No storage
-        </p>
+        
 
         <input
           ref={fileInputRef}
@@ -166,6 +160,91 @@ export default function SplitAdvancedPDF() {
           </div>
         )}
       </div>
+      <section className="mt-24 border-t pt-16">
+        <div className="max-w-5xl mx-auto space-y-16">
+
+          {/* HEADER */}
+          <header className="text-center">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+              Split PDF Files Online with Precision
+            </h2>
+            <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+              Extract exactly the pages you need from any PDF — fast, accurate,
+              and without quality loss.
+            </p>
+          </header>
+
+          {/* FEATURE GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Flexible Page Ranges
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Extract single pages, continuous ranges, or multiple ranges like
+                <code> 1-3, 6, 9-12</code> with full control.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                No Quality Loss
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Pages are extracted without recompression, preserving original text,
+                layout, and image quality.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Fast & Browser-Based
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Split PDFs instantly in your browser without installing software
+                or creating an account.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Secure & Private
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Files are processed securely and never stored. Everything is deleted
+                immediately after splitting.
+              </p>
+            </div>
+          </div>
+
+          {/* SEO CONTENT */}
+          <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-10 rounded-2xl border">
+            <h3>Why use PixelDrift’s PDF Splitter?</h3>
+
+            <p>
+              Splitting PDF files is essential when you need to extract specific
+              pages, share only relevant sections, or reorganize documents.
+              PixelDrift’s PDF splitter gives you complete control with zero
+              quality loss and maximum privacy.
+            </p>
+
+            <ul>
+              <li>Extract individual pages or page ranges from PDFs</li>
+              <li>Split PDFs into smaller, clean documents</li>
+              <li>No signup required and completely free</li>
+              <li>Preserves original formatting and clarity</li>
+              <li>Privacy-first processing with no file storage</li>
+            </ul>
+
+            <p>
+              Whether you’re working with contracts, reports, or study material,
+              PixelDrift makes splitting PDFs simple, fast, and reliable.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
     </ToolLayout>
   );
 }

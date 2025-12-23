@@ -1,46 +1,45 @@
+// app/tools/pdf/split/page.tsx
 import type { Metadata } from "next";
 import SplitAdvancedPDF from "./SplitPdfPage";
+import SplitPDFJsonLd from "./SplitPDFJsonLd";
 
 export const metadata: Metadata = {
-  title: "Split PDF Online | Extract Pages or Ranges – PixelDrift",
+  title: "Split PDF Online – Extract Pages or Ranges | PixelDrift",
   description:
-    "Split PDF pages instantly by selecting page ranges or extracting individual pages. Fast, secure, no file storage. Free PDF splitter by PixelDrift.",
+    "Split PDF files online by extracting specific pages or ranges. Fast, secure, no signup, and no file storage.",
   keywords: [
-    "split pdf",
+    "split pdf online",
     "extract pdf pages",
-    "pdf splitter online",
+    "pdf splitter",
     "separate pdf pages",
-    "free pdf split tool",
-    "split pdf into multiple files",
-    "extract pages from pdf",
-    "pdf page splitter",
+    "split pdf into files",
     "pdf range splitter",
-    "pixel drift pdf tools",
-    "split pdf without losing quality"
+    "PixelDrift pdf tools",
   ],
+  alternates: {
+    canonical: "https://pixeldrift.online/tools/pdf/split",
+  },
   openGraph: {
-    title: "Split PDF Online – Extract Pages or Ranges | PixelDrift",
+    title: "Split PDF Online – PixelDrift",
     description:
-      "Extract specific pages or page ranges from any PDF. 100% secure and fast — no upload stored.",
+      "Extract pages or page ranges from PDF files instantly and securely.",
     url: "https://pixeldrift.online/tools/pdf/split",
+    siteName: "PixelDrift",
     type: "website",
-    
   },
   twitter: {
     card: "summary_large_image",
     title: "Split PDF Online – PixelDrift",
     description:
-      "Fast, secure tool to extract pages or split PDFs into multiple files.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://pixeldrift.online/tools/pdf/split",
+      "Free online tool to split PDFs by page range or individual pages.",
   },
 };
 
 export default function Page() {
-  return <SplitAdvancedPDF />;
+  return (
+    <>
+      <SplitPDFJsonLd />
+      <SplitAdvancedPDF />
+    </>
+  );
 }

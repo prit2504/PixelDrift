@@ -1,44 +1,47 @@
+// app/tools/pdf/compress/page.tsx
 import type { Metadata } from "next";
 import CompressPDFAdvancedPage from "./CompressPDFPage";
+import CompressPDFJsonLd from "./CompressPDFJsonLd";
 
 export const metadata: Metadata = {
-  title: "Compress PDF (Advanced) | High-Quality PDF Compressor – PixelDrift",
+  title: "Compress PDF Online – High Quality PDF Compressor | PixelDrift",
   description:
-    "Compress PDFs using advanced controls: DPI, image quality, grayscale mode, metadata removal, and page-limit compression. Achieve small file sizes with excellent clarity — free & secure.",
+    "Compress PDF files online with advanced controls. Reduce PDF size using DPI, image quality, grayscale and metadata removal. Free & secure.",
   keywords: [
-    "compress pdf",
-    "advanced pdf compressor",
-    "reduce pdf size online",
-    "pdf compression tool",
+    "compress pdf online",
+    "pdf compressor",
+    "reduce pdf size",
+    "advanced pdf compression",
     "compress scanned pdf",
-    "high quality pdf compression",
     "pdf dpi compression",
     "remove pdf metadata",
-    "pdf grayscale converter",
+    "grayscale pdf",
     "PixelDrift pdf tools",
   ],
+  alternates: {
+    canonical: "https://pixeldrift.online/tools/pdf/compress",
+  },
   openGraph: {
-    title: "Compress PDF | High-Quality PDF Compressor – PixelDrift",
+    title: "Compress PDF Online – PixelDrift",
     description:
-      "Fine-tune your PDF compression with DPI settings, grayscale, metadata stripping, quality control, and page-limit options.",
+      "Advanced PDF compressor with DPI, quality, grayscale and metadata controls.",
     url: "https://pixeldrift.online/tools/pdf/compress",
+    siteName: "PixelDrift",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Compress PDF – PixelDrift",
+    title: "Compress PDF Online – PixelDrift",
     description:
-      "Advanced PDF compression with DPI, grayscale, metadata removal, and high-quality optimization.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://pixeldrift.online/tools/pdf/compress",
+      "Reduce PDF size with high-quality compression. Free online PDF compressor.",
   },
 };
 
 export default function Page() {
-  return  <CompressPDFAdvancedPage />;
+  return (
+    <>
+      <CompressPDFJsonLd />
+      <CompressPDFAdvancedPage />
+    </>
+  );
 }

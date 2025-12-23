@@ -238,24 +238,90 @@ export default function ImageConvertPage() {
 
         {/* SEO CONTENT */}
         <section className="mt-24 border-t pt-16">
-          <header className="text-center mb-10">
-            <h2 className="text-3xl font-extrabold mb-3">
-              Convert Images Online Without Quality Loss
-            </h2>
-            <p className="text-lg text-neutral-600 dark:text-neutral-400">
-              Batch convert images for web, design and productivity.
-            </p>
-          </header>
+  <div className="max-w-5xl mx-auto space-y-16">
 
-          <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-8 rounded-2xl border">
-            <ul>
-              <li>Convert JPG, PNG, WebP and TIFF images</li>
-              <li>Batch conversion supported</li>
-              <li>No signup required</li>
-              <li>Privacy-first processing</li>
-            </ul>
-          </article>
-        </section>
+    {/* HEADER */}
+    <header className="text-center">
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+        Convert Images Online with Professional Quality
+      </h2>
+      <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+        Convert images between modern and legacy formats quickly, securely,
+        and without losing visual quality.
+      </p>
+    </header>
+
+    {/* FEATURE GRID */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+        <h3 className="font-bold text-xl mb-3">
+          Wide Format Support
+        </h3>
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+          Convert images between JPG, PNG, WebP, and TIFF formats effortlessly.
+          Ideal for web publishing, design workflows, and compatibility needs.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+        <h3 className="font-bold text-xl mb-3">
+          Batch Image Conversion
+        </h3>
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+          Save time by converting multiple images at once with consistent output
+          quality and file naming options.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+        <h3 className="font-bold text-xl mb-3">
+          High-Quality Output
+        </h3>
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+          PixelDrift ensures clean color reproduction and sharp details during
+          format conversion, even for high-resolution images.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+        <h3 className="font-bold text-xl mb-3">
+          Privacy-First Processing
+        </h3>
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+          Your images are processed securely and never stored. Files are removed
+          immediately after conversion for complete privacy.
+        </p>
+      </div>
+    </div>
+
+    {/* SEO-RICH CONTENT BLOCK */}
+    <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-10 rounded-2xl border">
+      <h3>Why use PixelDrift’s Image Converter?</h3>
+
+      <p>
+        Image format compatibility is essential for modern workflows. Whether
+        you’re preparing images for websites, applications, printing, or archiving,
+        PixelDrift’s image converter helps you convert images online with speed,
+        precision, and reliability — completely free.
+      </p>
+
+      <ul>
+        <li>Convert JPG, PNG, WebP, and TIFF images online</li>
+        <li>Batch conversion for faster workflows</li>
+        <li>No signup or account required</li>
+        <li>High-quality output with minimal processing artifacts</li>
+        <li>Privacy-focused processing with no file storage</li>
+      </ul>
+
+      <p>
+        From designers and developers to everyday users, PixelDrift provides a
+        simple yet powerful solution for all image format conversion needs.
+      </p>
+    </article>
+
+  </div>
+</section>
+
       </ToolLayout>
     </>
   );

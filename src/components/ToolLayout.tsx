@@ -16,7 +16,7 @@ export default function ToolLayout({
     <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 py-10">
       
       {/* Sidebar */}
-      <Sidebar activeCategory={sidebarCategory} />
+        <Sidebar activeCategory={sidebarCategory}/>
 
       {/* Main Content */}
       <div>

@@ -276,17 +276,93 @@ export default function CompressImageAdvanced() {
             />
           </div>
 
-          <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-8 rounded-2xl border">
-            <h3>Why use PixelDrift's Image Compressor?</h3>
-            <p>
-              In today's web, page speed is a critical ranking factor. Large, unoptimized images are the #1 cause of slow websites. Our tool helps you <strong>reduce image file sizes</strong> for JPEG, PNG, and WebP formats efficiently.
-            </p>
-            <ul>
-              <li><strong>Lossless vs Lossy:</strong> Choose the perfect balance between file size and image quality.</li>
-              <li><strong>WebP Conversion:</strong> Convert old JPGs to modern WebP formats for 30% better compression.</li>
-              <li><strong>Bulk Editing:</strong> Save time by adjusting dimensions and quality in one go.</li>
-            </ul>
-          </article>
+          <section className="mt-24 border-t pt-16">
+            <div className="max-w-5xl mx-auto space-y-16">
+
+              {/* HEADER */}
+              <header className="text-center">
+                <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+                  Smart Image Compression for Faster Websites
+                </h2>
+                <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+                  Reduce image file size without sacrificing visual quality or sharpness.
+                  Designed for performance, SEO, and modern web delivery.
+                </p>
+              </header>
+
+              {/* FEATURE GRID */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+                  <h3 className="font-bold text-xl mb-3">
+                    Lossless & Lossy Compression
+                  </h3>
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                    Choose between lossless compression for perfect visual fidelity or
+                    lossy compression for maximum size reduction — without noticeable
+                    quality loss.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+                  <h3 className="font-bold text-xl mb-3">
+                    Modern WebP Optimization
+                  </h3>
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                    Convert JPG and PNG images to modern WebP format and reduce file size
+                    by up to 30–50%, improving page load speed and Core Web Vitals.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+                  <h3 className="font-bold text-xl mb-3">
+                    Bulk Image Optimization
+                  </h3>
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                    Compress multiple images at once with consistent quality and size
+                    settings — perfect for designers, developers, and content teams.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+                  <h3 className="font-bold text-xl mb-3">
+                    SEO & Performance Focused
+                  </h3>
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                    Smaller images mean faster page loads, better Lighthouse scores,
+                    improved user experience, and higher search engine rankings.
+                  </p>
+                </div>
+              </div>
+
+              {/* SEO-RICH CONTENT BLOCK */}
+              <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-10 rounded-2xl border">
+                <h3>Why use PixelDrift’s Image Compressor?</h3>
+
+                <p>
+                  Image optimization is essential for modern websites. Large, uncompressed
+                  images slow down page load times and negatively impact SEO and user
+                  experience. PixelDrift’s image compressor helps you reduce image file
+                  size online using advanced compression techniques — completely free.
+                </p>
+
+                <ul>
+                  <li>Compress JPEG, PNG, and WebP images efficiently</li>
+                  <li>Reduce image size without visible quality loss</li>
+                  <li>Convert images to modern WebP format</li>
+                  <li>Batch compress images to save time</li>
+                  <li>No signup required and privacy-first processing</li>
+                </ul>
+
+                <p>
+                  Whether you’re optimizing images for websites, e-commerce, blogs, or
+                  social media, PixelDrift gives you full control over compression quality
+                  and output size.
+                </p>
+              </article>
+
+            </div>
+          </section>
+
         </section>
       </main>
     </ToolLayout>

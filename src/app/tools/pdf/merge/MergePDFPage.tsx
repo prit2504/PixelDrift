@@ -101,22 +101,19 @@ export default function MergePDF() {
         onClick={() => fileInputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
-        className="
-          border-2 border-dashed rounded-2xl px-8 py-10 text-center cursor-pointer
-          bg-white dark:bg-neutral-800 shadow-sm 
-          border-gray-300 dark:border-neutral-700
-          hover:border-blue-500/60 transition
-        "
+        className="cursor-pointer rounded-2xl p-10 text-center border-2 border-dashed
+             border-neutral-200 dark:border-neutral-800
+             bg-white dark:bg-neutral-900 hover:border-blue-500 transition"
       >
-        <UploadCloud className="mx-auto h-12 w-12 mb-3 text-gray-500 dark:text-gray-400" />
-
-        <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
-          Drag & drop PDF files here, or click to browse
+        <UploadCloud className="mx-auto h-12 w-12 mb-3 text-blue-600" />
+        <p className="text-neutral-600 dark:text-neutral-400">
+          Drag & drop PDF files or click to upload
         </p>
-
-        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-xs text-neutral-500">
           Supports up to {MAX_FILES} files
         </p>
+
+
 
         <input
           ref={fileInputRef}
@@ -200,6 +197,91 @@ export default function MergePDF() {
           </div>
         )}
       </div>
+
+      <section className="mt-24 border-t pt-16">
+        <div className="max-w-5xl mx-auto space-y-16">
+
+          {/* HEADER */}
+          <header className="text-center">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+              Merge PDF Files Online in Seconds
+            </h2>
+            <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+              Combine multiple PDF files into one clean, professional document —
+              fast, secure, and without quality loss.
+            </p>
+          </header>
+
+          {/* FEATURE GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Drag & Reorder Pages
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Arrange PDF files in the exact order you want before merging to ensure
+                perfect document flow.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                No Quality Loss
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                PDFs are merged without recompression, preserving original text
+                sharpness, layout, and images.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Fast & Browser-Based
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Merge PDFs instantly in your browser without installing software
+                or creating an account.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-8">
+              <h3 className="font-bold text-xl mb-3">
+                Secure & Private
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
+                Files are processed securely and never stored. All documents are
+                deleted immediately after merging.
+              </p>
+            </div>
+          </div>
+
+          {/* SEO CONTENT */}
+          <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-10 rounded-2xl border">
+            <h3>Why use PixelDrift’s PDF Merger?</h3>
+
+            <p>
+              Merging PDF files is essential for reports, contracts, invoices,
+              and documentation. PixelDrift’s PDF merger lets you combine PDFs
+              online quickly and securely — without losing quality.
+            </p>
+
+            <ul>
+              <li>Merge multiple PDF files into one document</li>
+              <li>Reorder PDFs visually before merging</li>
+              <li>No signup required and completely free</li>
+              <li>Preserves original formatting and quality</li>
+              <li>Privacy-first processing with no file storage</li>
+            </ul>
+
+            <p>
+              Whether you’re organizing paperwork, submitting documents, or sharing
+              reports, PixelDrift ensures clean and professional merged PDFs every time.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
     </ToolLayout>
   );
 }
