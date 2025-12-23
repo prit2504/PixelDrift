@@ -1,44 +1,46 @@
+// app/tools/image/convert/page.tsx
 import type { Metadata } from "next";
 import ImageConvertPage from "./ImageConvertPage";
+import ImageConvertJsonLd from "./ImageConvertJsonLd";
 
 export const metadata: Metadata = {
-  title: "Image Converter | Convert JPG, PNG, WebP, BMP, TIFF – PixelDrift",
+  title: "Image Converter Online – Convert JPG, PNG, WebP, TIFF | PixelDrift",
   description:
-    "Free online image converter to convert JPG, PNG, WebP, BMP, and TIFF. Supports batch conversion, renaming, and high-quality output.",
+    "Convert images online to JPG, PNG, WebP or TIFF. Fast batch image converter with high-quality output. Free, secure & no signup.",
   keywords: [
-    "image converter",
-    "convert image online",
+    "image converter online",
+    "convert image format",
     "jpg to png",
     "png to webp",
     "webp to jpg",
-    "bmp converter",
-    "tiff converter",
+    "tiff image converter",
     "batch image converter",
-    "free image tools",
-    "PixelDrift image converter",
+    "PixelDrift",
   ],
+  alternates: {
+    canonical: "https://pixeldrift.online/tools/image/convert",
+  },
   openGraph: {
-    title: "Image Converter | Convert JPG, PNG, WebP, BMP, TIFF – PixelDrift",
+    title: "Image Converter Online – PixelDrift",
     description:
-      "Convert multiple images between JPG, PNG, WebP, BMP, and TIFF formats. Fast, free, and secure batch conversion.",
+      "Convert images to JPG, PNG, WebP or TIFF online. Free & fast batch image converter.",
     url: "https://pixeldrift.online/tools/image/convert",
+    siteName: "PixelDrift",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Image Converter | PixelDrift",
+    title: "Image Converter Online – PixelDrift",
     description:
-      "Convert images to JPG, PNG, WebP, BMP, or TIFF. Supports batch conversion & renaming.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://pixeldrift.online/tools/image/convert",
+      "Free online image converter for JPG, PNG, WebP & TIFF formats.",
   },
 };
 
 export default function Page() {
-  return <ImageConvertPage />;
+  return (
+    <>
+      <ImageConvertJsonLd />
+      <ImageConvertPage />
+    </>
+  );
 }

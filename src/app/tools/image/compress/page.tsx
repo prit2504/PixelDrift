@@ -1,44 +1,40 @@
+// app/tools/image/compress-advanced/page.tsx
 import type { Metadata } from "next";
 import CompressImageAdvanced from "./CompressImageAdvanced";
+import ImageCompressorJsonLd from "./JsonLd";
 
 export const metadata: Metadata = {
-  title: "Advanced Image Compressor | Reduce Size Without Quality Loss – PixelDrift",
+  title: "Advanced Image Compressor Online – Free JPG, PNG & WebP | PixelDrift",
   description:
-    "Compress images with adjustable quality, resize percentage, max dimensions, format conversion, and metadata control. Supports JPG, PNG, WebP.",
+    "Compress images online without quality loss. Reduce JPG, PNG & WebP image size instantly. Free, fast, secure & no signup.",
   keywords: [
     "compress image online",
     "image compressor",
-    "advanced image compression",
-    "resize image",
-    "reduce image file size",
-    "WebP compressor",
-    "JPEG compressor",
-    "PNG compressor",
-    "lossless compression",
-    "PixelDrift image tools",
+    "reduce image size",
+    "jpeg compressor",
+    "png compressor",
+    "webp image compression",
+    "free image optimizer",
+    "PixelDrift",
   ],
-  openGraph: {
-    title: "Advanced Image Compressor | PixelDrift",
-    description:
-      "Optimize, resize, and compress images with full control over quality, resolution, and metadata.",
-    url: "https://pixeldrift.online/tools/image/compress",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Advanced Image Compressor | PixelDrift",
-    description:
-      "Compress and optimize images with full control over quality, resize, resolution, and metadata.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
   alternates: {
     canonical: "https://pixeldrift.online/tools/image/compress",
+  },
+  openGraph: {
+    title: "Advanced Image Compressor – PixelDrift",
+    description:
+      "Free online image compressor to reduce JPG, PNG & WebP file size without losing quality.",
+    url: "https://pixeldrift.online/tools/image/compress",
+    siteName: "PixelDrift",
+    type: "website",
   },
 };
 
 export default function Page() {
-  return <CompressImageAdvanced />;
+  return (
+    <>
+      <ImageCompressorJsonLd />
+      <CompressImageAdvanced />
+    </>
+  );
 }

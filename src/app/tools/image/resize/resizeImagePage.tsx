@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import ToolLayout from "@/components/ToolLayout"; 
+import ToolLayout from "@/components/ToolLayout";
 import { UploadCloud, DownloadCloud, Image as ImageIcon } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -18,7 +18,7 @@ interface Preset {
 
 const DEFAULT_WIDTH = 1080;
 const DEFAULT_HEIGHT = 1080;
-const DEFAULT_BG_COLOR = "#000000"; 
+const DEFAULT_BG_COLOR = "#000000";
 const PRIMARY_COLOR_CLASSES = "bg-blue-600 hover:bg-blue-500 text-white";
 const SECONDARY_COLOR_CLASSES = "bg-gray-700 hover:bg-gray-600 text-gray-200 border-gray-600";
 
@@ -45,11 +45,16 @@ export default function ResizeImagePage() {
   const [loading, setLoading] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
 
+  const [previewBlobUrl, setPreviewBlobUrl] = useState<string | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const previewAbortRef = useRef<AbortController | null>(null);
+
+
   // --- REFS ---
   const inputRef = useRef<HTMLInputElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   // Store the actual loaded image object to allow quick redraws
-  const loadedImageRef = useRef<HTMLImageElement | null>(null); 
+  const loadedImageRef = useRef<HTMLImageElement | null>(null);
   // ------------
 
   /* ---------------- FILE UPLOAD ---------------- */
@@ -65,7 +70,7 @@ export default function ResizeImagePage() {
     }
 
     setFiles(imgs);
-    
+
     // Cleanup old URL and image ref
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
@@ -74,14 +79,14 @@ export default function ResizeImagePage() {
 
     const newUrl = URL.createObjectURL(imgs[0]);
     setPreviewUrl(newUrl);
-    
+
     // Reset active preset when a new image is uploaded
     setActivePreset(null);
   }, [previewUrl]);
 
 
   /* ---------------- CANVAS DRAWING LOGIC ---------------- */
-  
+
   // This function is memoized and depends on all resizing parameters
   const drawToCanvas = useCallback((img: HTMLImageElement) => {
     const canvas = canvasRef.current;
@@ -126,7 +131,7 @@ export default function ResizeImagePage() {
 
     // 5. Draw the image onto the canvas
     ctx.drawImage(img, x, y, rw, rh);
-    
+
   }, [width, height, mode, bg]);
 
 
@@ -140,30 +145,30 @@ export default function ResizeImagePage() {
 
     const handleLoad = () => {
       // Store the loaded image object for quick redraws
-      loadedImageRef.current = img; 
+      loadedImageRef.current = img;
       drawToCanvas(img);
       // Clean up the temporary URL only after image object is ready
-      URL.revokeObjectURL(previewUrl); 
+      URL.revokeObjectURL(previewUrl);
     };
 
     // Make the loading robust against fast Blob URL loading
     if (img.complete) {
-        handleLoad();
+      handleLoad();
     } else {
-        img.onload = handleLoad;
-        img.onerror = () => {
-            toast.error("Failed to load image into preview.");
-        };
+      img.onload = handleLoad;
+      img.onerror = () => {
+        toast.error("Failed to load image into preview.");
+      };
     }
 
     // Cleanup: Remove the handlers
     return () => {
-        img.onload = null;
-        img.onerror = null;
-        // Do NOT revoke previewUrl here, it's handled in handleLoad
+      img.onload = null;
+      img.onerror = null;
+      // Do NOT revoke previewUrl here, it's handled in handleLoad
     };
 
-  }, [previewUrl, drawToCanvas]); 
+  }, [previewUrl, drawToCanvas]);
   // NOTE: drawToCanvas is intentionally a dependency here so the first draw uses the latest settings.
 
 
@@ -177,6 +182,47 @@ export default function ResizeImagePage() {
     }
   }, [width, height, mode, bg, drawToCanvas]);
 
+  useEffect(() => {
+    if (!files.length) return;
+
+    const timeout = setTimeout(async () => {
+      setPreviewLoading(true);
+
+      previewAbortRef.current?.abort();
+      previewAbortRef.current = new AbortController();
+
+      try {
+        const form = new FormData();
+        form.append("file", files[0]);
+        form.append("width", String(width));
+        form.append("height", String(height));
+        form.append("resize_mode", mode);
+        form.append("bg_color", mode === "pad" ? bg : DEFAULT_BG_COLOR);
+
+        const res = await fetch("/api/image/resize/preview", {
+          method: "POST",
+          body: form,
+          signal: previewAbortRef.current.signal,
+          cache: "no-store",
+        });
+
+        if (!res.ok) throw new Error("Preview failed");
+
+        const blob = await res.blob();
+        if (previewBlobUrl) URL.revokeObjectURL(previewBlobUrl);
+
+        setPreviewBlobUrl(URL.createObjectURL(blob));
+      } catch (err) {
+        if ((err as any).name !== "AbortError") {
+          toast.error("Preview update failed");
+        }
+      } finally {
+        setPreviewLoading(false);
+      }
+    }, 350); // ⏱ debounce
+
+    return () => clearTimeout(timeout);
+  }, [files, width, height, mode, bg]);
 
   /* ---------------- DOWNLOAD HANDLER ---------------- */
 
@@ -195,7 +241,7 @@ export default function ResizeImagePage() {
     form.append("out_format", "jpeg");
 
     try {
-      
+
 
       const res = await fetch(
         "/api/image/resize",
@@ -232,7 +278,7 @@ export default function ResizeImagePage() {
       const a = document.createElement("a");
       a.href = url;
       a.download = files.length === 1 ? "resized.jpg" : "resized-images.zip";
-      
+
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -255,7 +301,7 @@ export default function ResizeImagePage() {
     setHeight(p.h);
     setActivePreset(p.label);
   };
-  
+
   const handleCustomSizeChange = (setter: React.Dispatch<React.SetStateAction<number>>, value: string) => {
     setter(Number(value));
     setActivePreset(null);
@@ -268,29 +314,35 @@ export default function ResizeImagePage() {
       title="Resize Image"
       description="Resize images with presets and background padding."
       sidebarCategory="image"
-      
+
     >
+      <h1 className="sr-only">
+        Resize Image Online – Free, Fast & High Quality
+      </h1>
+
       {/* HOW TO USE */}
-      <div className="mb-6 rounded-xl border border-blue-800 bg-blue-950 p-4 text-sm text-blue-300">
-        <b>How to use:</b>
-        <ol className="list-decimal ml-5 mt-2 space-y-1">
-          <li>Upload image(s)</li>
-          <li>Select a preset or enter custom size</li>
-          <li>Choose resize mode</li>
-          <li>Review the scaled preview of the resized image (updates instantly!)</li>
+      <section className="mb-10 rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-6">
+        <h2 className="font-bold mb-3 text-lg">How to Resize Images</h2>
+        <ol className="list-decimal ml-5 space-y-1 text-sm text-neutral-600 dark:text-neutral-400">
+          <li>Upload one or more images</li>
+          <li>Select preset or enter custom size</li>
+          <li>Choose resize mode (Fit, Stretch or Pad)</li>
+          <li>Preview resized image instantly</li>
           <li>Download resized image(s)</li>
         </ol>
-      </div>
+      </section>
+
 
       {/* UPLOAD */}
-      <div
+      <section
         onClick={() => inputRef.current?.click()}
-        className="border-2 border-dashed border-gray-600 rounded-2xl p-10 text-center cursor-pointer bg-gray-800 hover:bg-gray-700 transition"
+        className="cursor-pointer rounded-2xl p-10 text-center border-2 border-dashed border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:border-blue-500 transition"
       >
+
         <UploadCloud className="mx-auto h-10 w-10 mb-2 text-blue-400" />
         <p className="text-gray-300">Click or drag images here</p>
         {files.length > 0 && (
-            <p className="text-sm text-gray-400 mt-1">{files.length} image(s) selected.</p>
+          <p className="text-sm text-gray-400 mt-1">{files.length} image(s) selected.</p>
         )}
         <input
           ref={inputRef}
@@ -300,67 +352,67 @@ export default function ResizeImagePage() {
           hidden
           onChange={(e) => onFiles(e.target.files)}
         />
-      </div>
-      
+      </section>
+
       {/* OPTIONS */}
       {files.length > 0 && (
         <div className="mt-8 space-y-6">
-            <h3 className="font-semibold text-lg border-b border-gray-700 pb-2 text-gray-200">Resize Parameters</h3>
+          <h3 className="font-semibold text-lg border-b border-gray-700 pb-2 text-gray-200">Resize Parameters</h3>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-400">Width (px)</label>
-                    <input
-                        type="number"
-                        value={width}
-                        onChange={(e) => handleCustomSizeChange(setWidth, e.target.value)}
-                        className={`p-3 border rounded-xl w-full ${SECONDARY_COLOR_CLASSES} focus:ring-blue-500 focus:border-blue-500`}
-                        placeholder="Width"
-                        min="1"
-                    />
-                </div>
-                <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-400">Height (px)</label>
-                    <input
-                        type="number"
-                        value={height}
-                        onChange={(e) => handleCustomSizeChange(setHeight, e.target.value)}
-                        className={`p-3 border rounded-xl w-full ${SECONDARY_COLOR_CLASSES} focus:ring-blue-500 focus:border-blue-500`}
-                        placeholder="Height"
-                        min="1"
-                    />
-                </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-400">Width (px)</label>
+              <input
+                type="number"
+                value={width}
+                onChange={(e) => handleCustomSizeChange(setWidth, e.target.value)}
+                className={`p-3 border rounded-xl w-full ${SECONDARY_COLOR_CLASSES} focus:ring-blue-500 focus:border-blue-500`}
+                placeholder="Width"
+                min="1"
+              />
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-400">Resize Mode</label>
-                    <select
-                        value={mode}
-                        onChange={(e) => setMode(e.target.value as ResizeMode)}
-                        className={`p-3 border rounded-xl w-full ${SECONDARY_COLOR_CLASSES} appearance-none`}
-                    >
-                        <option value="fit">Fit (Keep ratio, max size)</option>
-                        <option value="stretch">Stretch (Ignore ratio, fill box)</option>
-                        <option value="pad">Pad (Keep ratio, fill empty space with color)</option>
-                    </select>
-                </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-400">Height (px)</label>
+              <input
+                type="number"
+                value={height}
+                onChange={(e) => handleCustomSizeChange(setHeight, e.target.value)}
+                className={`p-3 border rounded-xl w-full ${SECONDARY_COLOR_CLASSES} focus:ring-blue-500 focus:border-blue-500`}
+                placeholder="Height"
+                min="1"
+              />
+            </div>
+          </div>
 
-                {mode === "pad" && (
-                    <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-400">Background Color (Pad Mode)</label>
-                        <div className="flex items-center p-2 border border-gray-600 rounded-xl bg-gray-700">
-                            <input
-                                type="color"
-                                value={bg}
-                                onChange={(e) => setBg(e.target.value)}
-                                className="w-10 h-10 border-none p-0 cursor-pointer mr-3"
-                            />
-                            <span className="text-sm font-mono text-gray-300">{bg}</span>
-                        </div>
-                    </div>
-                )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-400">Resize Mode</label>
+              <select
+                value={mode}
+                onChange={(e) => setMode(e.target.value as ResizeMode)}
+                className={`p-3 border rounded-xl w-full ${SECONDARY_COLOR_CLASSES} appearance-none`}
+              >
+                <option value="fit">Fit (Keep ratio, max size)</option>
+                <option value="stretch">Stretch (Ignore ratio, fill box)</option>
+                <option value="pad">Pad (Keep ratio, fill empty space with color)</option>
+              </select>
             </div>
+
+            {mode === "pad" && (
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-gray-400">Background Color (Pad Mode)</label>
+                <div className="flex items-center p-2 border border-gray-600 rounded-xl bg-gray-700">
+                  <input
+                    type="color"
+                    value={bg}
+                    onChange={(e) => setBg(e.target.value)}
+                    className="w-10 h-10 border-none p-0 cursor-pointer mr-3"
+                  />
+                  <span className="text-sm font-mono text-gray-300">{bg}</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -372,11 +424,12 @@ export default function ResizeImagePage() {
             <button
               key={p.label}
               onClick={() => handlePresetClick(p)}
-              className={`rounded-xl border p-3 text-sm transition text-left ${
-                activePreset === p.label
-                  ? "border-blue-600 bg-blue-900 text-blue-300 ring-2 ring-blue-700"
-                  : "border-gray-700 bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+              className={`rounded-xl border p-3 text-sm transition text-left ${activePreset === p.label
+                ? "border-blue-600 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
+
+                : "border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+
+                }`}
             >
               <div className="font-medium">{p.label}</div>
               <div className="text-xs text-gray-500">
@@ -388,42 +441,52 @@ export default function ResizeImagePage() {
       </div>
 
       {/* PREVIEW */}
+  
+
       {files.length > 0 && (
         <div className="mt-10">
-          <h3 className="font-semibold mb-3 text-gray-200">Resized Preview</h3>
-          
-          <div className="relative max-w-full overflow-hidden border-4 w-70 border-gray-700 rounded-xl shadow-2xl bg-gray-950">
-            {/* Show canvas only when image data is ready */}
-            {loadedImageRef.current ? (
-                <canvas
-                    ref={canvasRef}
-                    className="block w-full h-auto"
-                />
+          <h3 className="font-semibold mb-3 text-gray-200">
+            Live Backend Preview
+          </h3>
+
+          <div className="relative max-w-100 max-h-100 overflow-hidden border-4  border-gray-700 rounded-xl shadow-2xl bg-gray-950">
+            {previewLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl">
+                <div className="animate-spin h-10 w-10 rounded-full border-4 border-blue-600 border-t-transparent" />
+              </div>
+            )}
+
+            {previewBlobUrl ? (
+              <img
+                src={previewBlobUrl}
+                alt="Resized image preview"
+                className="rounded-xl shadow-lg block w-full h-auto"
+              />
             ) : (
-                // Placeholder while the image loads
-                <div className="flex justify-center items-center h-48 text-gray-500">
-                    <ImageIcon className="w-8 h-8 mr-2"/>
-                    Loading image for preview...
-                </div>
+              <div className="text-neutral-500 flex items-center">
+                <ImageIcon className="mr-2" />
+                Preview will appear here
+              </div>
             )}
           </div>
         </div>
       )}
 
+
       {/* PROGRESS */}
       {loading && (
         <div className="mt-6 w-full">
-            <p className="text-sm text-gray-400 mb-1">Processing {files.length} images...</p>
-            <div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
-                <div
-                    className="h-full bg-blue-600 transition-all duration-300"
-                    style={{ width: `${progress}%` }}
-                    role="progressbar"
-                    aria-valuenow={progress}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                />
-            </div>
+          <p className="text-sm text-gray-400 mb-1">Processing {files.length} images...</p>
+          <div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-blue-600 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+              role="progressbar"
+              aria-valuenow={progress}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            />
+          </div>
         </div>
       )}
 
@@ -433,15 +496,40 @@ export default function ResizeImagePage() {
           <button
             onClick={downloadResized}
             disabled={loading}
-            className={`px-8 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 w-full sm:w-auto transition-colors ${
-                loading ? "bg-blue-400 cursor-not-allowed" : PRIMARY_COLOR_CLASSES
-            }`}
+            className={`px-8 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 w-full sm:w-auto transition-colors ${loading ? "bg-blue-400 cursor-not-allowed" : PRIMARY_COLOR_CLASSES
+              }`}
           >
             <DownloadCloud size={20} />
             {loading ? `Processing... (${Math.round(progress)}%)` : "Download Resized Images"}
           </button>
         </div>
       )}
+
+      <section className="mt-24 border-t pt-16">
+        <header className="text-center mb-10">
+          <h2 className="text-3xl font-extrabold mb-3">
+            Resize Images Online Without Quality Loss
+          </h2>
+          <p className="text-lg text-neutral-600 dark:text-neutral-400">
+            Resize images for web, social media and email in seconds.
+          </p>
+        </header>
+
+        <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-8 rounded-2xl border">
+          <p>
+            PixelDrift’s image resizer lets you resize images online using presets or
+            custom dimensions. Whether you need Instagram sizes or website-optimized
+            images, this tool ensures perfect output every time.
+          </p>
+          <ul>
+            <li>Resize images without distortion</li>
+            <li>Maintain aspect ratio or pad background</li>
+            <li>Batch resize multiple images</li>
+            <li>Improve page speed and SEO</li>
+          </ul>
+        </article>
+      </section>
+
     </ToolLayout>
   );
 }

@@ -38,6 +38,11 @@ export default function ImageConvertPage() {
         name: f.name,
       }));
 
+    if (!items.length) {
+      toast.error("Upload valid image files");
+      return;
+    }
+
     setFiles((prev) => [...prev, ...items]);
   };
 
@@ -57,31 +62,23 @@ export default function ImageConvertPage() {
 
   /* ---------------- CONVERT ---------------- */
 
-  const convertImages = async (): Promise<void> => {
-    if (files.length === 0) {
-      toast.error("Upload at least one image.");
-      return;
-    }
+  const convertImages = async () => {
+    if (!files.length) return toast.error("Upload at least one image");
 
     setLoading(true);
 
     const form = new FormData();
     files.forEach((f) => form.append("files", f.file));
     form.append("out_format", format);
-
-    if (rename.trim()) {
-      form.append("rename_to", rename.trim());
-    }
+    if (rename.trim()) form.append("rename_to", rename.trim());
 
     try {
-      const res = await fetch(
-        "/api/image/convert",
-        { method: "POST", body: form }
-      );
+      const res = await fetch("/api/image/convert", {
+        method: "POST",
+        body: form,
+      });
 
-      if (!res.ok) {
-        throw new Error("Conversion failed");
-      }
+      if (!res.ok) throw new Error("Conversion failed");
 
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -91,14 +88,15 @@ export default function ImageConvertPage() {
       a.download =
         files.length === 1
           ? `${rename || files[0].name.split(".")[0]}.${format}`
-          : "converted_images.zip";
-      a.click();
+          : "converted-images.zip";
 
+      a.click();
       URL.revokeObjectURL(url);
       clearAll();
-      toast.success("Images converted successfully!");
-    } catch (err) {
-      toast.error("Failed to convert images.");
+
+      toast.success("Images converted successfully");
+    } catch {
+      toast.error("Failed to convert images");
     } finally {
       setLoading(false);
     }
@@ -117,17 +115,32 @@ export default function ImageConvertPage() {
 
       <ToolLayout
         title="Convert Image Format"
-        description="Convert images to JPG, PNG, WebP, BMP or TIFF."
+        description="Convert images to JPG, PNG, WebP or TIFF."
         sidebarCategory="image"
       >
+        <h1 className="sr-only">
+          Image Converter Online – Free & Secure
+        </h1>
+
+        {/* HOW TO */}
+        <section className="mb-10 rounded-2xl border bg-neutral-50 dark:bg-neutral-900 p-6">
+          <h2 className="font-bold mb-3 text-lg">How to Convert Images</h2>
+          <ol className="list-decimal ml-5 space-y-1 text-sm text-neutral-600 dark:text-neutral-400">
+            <li>Upload one or more images</li>
+            <li>Select output format</li>
+            <li>Optional: rename output files</li>
+            <li>Convert & download instantly</li>
+          </ol>
+        </section>
+
         {/* UPLOAD */}
-        <div
-          className={`cursor-pointer rounded-2xl p-10 text-center border-2 border-dashed
-          ${
-            dragging
-              ? "border-blue-600 bg-blue-50 dark:bg-neutral-800"
-              : "border-gray-300 dark:border-neutral-700"
-          }`}
+        <section
+          className={`cursor-pointer rounded-2xl p-10 text-center border-2 border-dashed transition
+            ${
+              dragging
+                ? "border-blue-600 bg-blue-50 dark:bg-neutral-800"
+                : "border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900"
+            }`}
           onClick={() => fileInputRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDragEnter={() => setDragging(true)}
@@ -138,8 +151,10 @@ export default function ImageConvertPage() {
             handleFiles(e.dataTransfer.files);
           }}
         >
-          <UploadCloud className="mx-auto h-10 w-10 mb-3 text-blue-600" />
-          <p>Drag & drop images or click to upload</p>
+          <UploadCloud className="mx-auto h-12 w-12 mb-3 text-blue-600" />
+          <p className="text-neutral-600 dark:text-neutral-400">
+            Drag & drop images or click to upload
+          </p>
 
           <input
             ref={fileInputRef}
@@ -149,7 +164,7 @@ export default function ImageConvertPage() {
             accept="image/*"
             onChange={(e) => e.target.files && handleFiles(e.target.files)}
           />
-        </div>
+        </section>
 
         {/* PREVIEW */}
         {files.length > 0 && (
@@ -158,27 +173,33 @@ export default function ImageConvertPage() {
               <motion.div
                 key={item.name}
                 layout
-                className="relative rounded-xl overflow-hidden border"
+                className="relative rounded-xl overflow-hidden border bg-neutral-50 dark:bg-neutral-900"
               >
-                <img src={item.url} className="w-full h-32 object-cover" />
+                <img
+                  src={item.url}
+                  alt={item.name}
+                  className="w-full h-32 object-cover"
+                />
                 <button
                   onClick={() => removeFile(item.name)}
                   className="absolute top-2 right-2 bg-white rounded-full p-1"
                 >
                   <X size={16} />
                 </button>
-                <div className="px-2 py-1 text-xs truncate">{item.name}</div>
+                <div className="px-2 py-1 text-xs truncate">
+                  {item.name}
+                </div>
               </motion.div>
             ))}
           </div>
         )}
 
         {/* OPTIONS */}
-        <div className="mt-8 space-y-4">
+        <div className="mt-8 space-y-4 max-w-md">
           <select
             value={format}
             onChange={(e) => setFormat(e.target.value as OutputFormat)}
-            className="w-full px-4 py-2 rounded-xl border"
+            className="w-full px-4 py-3 rounded-xl border bg-white dark:bg-neutral-900"
           >
             <option value="jpeg">JPEG</option>
             <option value="png">PNG</option>
@@ -191,25 +212,50 @@ export default function ImageConvertPage() {
             placeholder="Rename output (optional)"
             value={rename}
             onChange={(e) => setRename(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl border"
+            className="w-full px-4 py-3 rounded-xl border bg-white dark:bg-neutral-900"
           />
         </div>
 
         {/* ACTIONS */}
         {files.length > 0 && (
-          <div className="mt-6 flex gap-4">
+          <div className="mt-8 flex gap-4">
             <button
               onClick={convertImages}
               disabled={loading}
-              className="px-6 py-3 bg-blue-600 text-white rounded-xl"
+              className="px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold"
             >
-              Convert
+              Convert Images
             </button>
-            <button onClick={clearAll} className="px-6 py-3 border rounded-xl">
+
+            <button
+              onClick={clearAll}
+              className="px-8 py-4 rounded-xl border"
+            >
               Clear
             </button>
           </div>
         )}
+
+        {/* SEO CONTENT */}
+        <section className="mt-24 border-t pt-16">
+          <header className="text-center mb-10">
+            <h2 className="text-3xl font-extrabold mb-3">
+              Convert Images Online Without Quality Loss
+            </h2>
+            <p className="text-lg text-neutral-600 dark:text-neutral-400">
+              Batch convert images for web, design and productivity.
+            </p>
+          </header>
+
+          <article className="prose prose-neutral dark:prose-invert max-w-none bg-neutral-50 dark:bg-neutral-900 p-8 rounded-2xl border">
+            <ul>
+              <li>Convert JPG, PNG, WebP and TIFF images</li>
+              <li>Batch conversion supported</li>
+              <li>No signup required</li>
+              <li>Privacy-first processing</li>
+            </ul>
+          </article>
+        </section>
       </ToolLayout>
     </>
   );

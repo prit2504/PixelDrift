@@ -1,45 +1,46 @@
+// app/tools/image/resize/page.tsx
 import type { Metadata } from "next";
-import ResizeNewPage from "./resizeImagePage";
+import ResizeImagePage from "./resizeImagePage";
+import ResizeImageJsonLd from "./ResizeImageJsonLd";
 
 export const metadata: Metadata = {
-  title: "Resize Image | Smart Online Image Resizer – PixelDrift",
+  title: "Resize Image Online – Free JPG, PNG & WebP Resizer | PixelDrift",
   description:
-    "Resize images by custom width, height, or percentage. Use presets for social media, prevent upscaling, keep aspect ratio, sharpen output, and batch resize multiple images online.",
+    "Resize images online by width, height or presets. Resize JPG, PNG & WebP images without losing quality. Free, fast & secure.",
   keywords: [
     "resize image online",
-    "free image resizer",
-    "advanced image resize tool",
+    "image resizer",
     "resize jpg",
     "resize png",
     "resize webp",
     "batch image resizer",
-    "resize without losing quality",
-    "sharpen image online",
-    "PixelDrift image tools",
+    "social media image resize",
+    "PixelDrift",
   ],
+  alternates: {
+    canonical: "https://pixeldrift.online/tools/image/resize",
+  },
   openGraph: {
-    title: "Resize Image (Advanced) | Smart Online Image Resizer – PixelDrift",
+    title: "Resize Image Online – PixelDrift",
     description:
-      "Resize images using presets or custom dimensions. Adjust percentage, format, sharpening, quality, and prevent upscaling — all online for free.",
+      "Resize images using presets or custom dimensions. Free online image resizer.",
     url: "https://pixeldrift.online/tools/image/resize",
+    siteName: "PixelDrift",
     type: "website",
-   
   },
   twitter: {
     card: "summary_large_image",
     title: "Resize Images Online – PixelDrift",
     description:
-      "Powerful online image resizer with presets, aspect ratio control, sharpening, and batch resizing.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://pixeldrift.online/tools/image/resize",
+      "Free online image resizer with presets, aspect ratio control and batch resizing.",
   },
 };
 
 export default function Page() {
-  return <ResizeNewPage />;
+  return (
+    <>
+      <ResizeImageJsonLd />
+      <ResizeImagePage/>
+    </>
+  );
 }
